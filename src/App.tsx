@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useCalculateSize from './useCalculateSize'
-import useRerenderOnDimensionChange from './useRerenderOnDimensionChange'
 
 // https://www.kirupa.com/canvas/canvas_high_dpi_retina.htm
+
+const map = { width: 800, height: 1200 }
 
 const App = () => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
@@ -19,11 +20,24 @@ const App = () => {
 	useEffect(() => {
 		const canvas = canvasRef.current
 		console.log('canvas', canvasRef, canvas)
-		if (canvas) {
-			const { width, height, offsetHeight, offsetWidth } = canvas
-			console.log('canvas', { width, height, offsetWidth, offsetHeight })
-			canvas.width = offsetWidth
-			canvas.height = offsetHeight
+		if (canvas && box) {
+			const { width, height } = box
+			console.log('box', { width, height })
+			// canvas.width = offsetWidth
+			// canvas.height = offsetHeight
+
+			const mapAspectRatio = map.width / map.height
+			const boxAspectRatio = box.width / box.height
+
+			console.log({ mapAspectRatio, boxAspectRatio })
+
+			if (mapAspectRatio > boxAspectRatio) {
+				canvas.width = box.width
+				canvas.height = box.width / mapAspectRatio
+			} else {
+				canvas.height = box.height
+				canvas.width = box.height * mapAspectRatio
+			}
 
 			draw()
 		}
@@ -47,7 +61,7 @@ const App = () => {
 	}
 
 	return (
-		<div ref={measuredRef}>
+		<div ref={measuredRef} className="root">
 			<canvas ref={canvasRef}></canvas>
 		</div>
 	)

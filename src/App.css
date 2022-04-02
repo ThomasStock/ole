@@ -2,8 +2,19 @@ body {
 	margin: 0;
 	overflow: hidden;
 }
-canvas {
+
+.root {
 	width: 100vw;
 	height: 100vh;
+	background-color: rgb(206, 206, 117);
+}
+
+canvas {
 	background-color: cadetblue;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
