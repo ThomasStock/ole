@@ -6,6 +6,12 @@ import useCalculateSize from './useCalculateSize'
 const map = { width: 800, height: 900 }
 const field = { width: 400, height: 500 }
 
+type Vertex3D = { x: number; y: number; z: number }
+type Face = Vertex3D[]
+const createVertex = (x: number, y: number, z = 0) => ({ x, y, z })
+
+const fieldFace: Face = [{ x: }]
+
 const App = () => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
 	const { measuredRef, box } = useCalculateSize()
