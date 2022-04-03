@@ -10,7 +10,7 @@ const field = { width: 400, height: 500 }
 
 type Vertex3D = { x: number; y: number; z: number }
 type Face = Vertex3D[]
-// const createVertex = (x: number, y: number, z = 0) => ({ x, y, z })
+const createVertex = (x: number, y: number, z = 0) => ({ x, y, z })
 
 const fieldFace: Face = [
 	{ x: 0, y: 0, z: 0 },
@@ -25,7 +25,7 @@ const positionVertex = (startingPoint: Vertex3D, vertex: Vertex3D): Vertex3D => 
 	z: vertex.z + startingPoint.z,
 })
 
-const positionFace = (startingPoint: Vertex3D, face: Face) =>
+const positionFace = (startingPoint: Vertex3D, face: Face): Face =>
 	face.map((vertex) => positionVertex(startingPoint, vertex))
 
 const App = () => {
@@ -89,18 +89,18 @@ const App = () => {
 	)
 }
 
-const drawFace = (context: CanvasRenderingContext2D, face: Face, scale = 1) => {
-	Object.freeze(face)
-
+const drawFace = (context: CanvasRenderingContext2D, unscaledFace: Face, scale = 1) => {
 	const scaleSet = <T extends number[]>(...args: T): T => args.map((arg) => arg * scale) as T
 
+	const face = unscaledFace.map((vertex) => createVertex(...scaleSet(vertex.x, vertex.y, vertex.z)))
+
 	let path = new Path2D()
-	path.moveTo(...scaleSet(face[0].x, face[0].y))
+	path.moveTo(face[0].x, face[0].y)
 
 	const faceReversed = [...face].reverse()
 	// Draw from first point to last point and then all the way back to the first point
 	faceReversed.forEach((vertex) => {
-		path.lineTo(...scaleSet(vertex.x, vertex.y))
+		path.lineTo(vertex.x, vertex.y)
 	})
 
 	context.stroke(path)
